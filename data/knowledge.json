@@ -1,0 +1,18 @@
+{
+    "materials": [
+        {
+            "id": 1,
+            "title": "Инструкция по ТБ для нефтегазовых объектов",
+            "category": "safety",
+            "file": "/knowledge-base/safety/instructions/tb-2024.pdf",
+            "tags": ["безопасность", "ГОСТ"]
+        },
+        {
+            "id": 2,
+            "title": "ГОСТ Р 55596-2023",
+            "category": "regulations",
+            "file": "/knowledge-base/regulations/gost-55596-2023.pdf",
+            "tags": ["нормативы", "трубопроводы"]
+        }
+    ]
+}

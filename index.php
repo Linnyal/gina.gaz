@@ -1,0 +1,1179 @@
+<?php 
+$page_title = "Корпоративный портал Газпрома";
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/header.php'; 
+?>
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= $page_title ?></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <style>
+        /* Обновленные стили главной страницы */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Обновленная герой-секция */
+        .hero {
+            background: linear-gradient(135deg, rgb(63, 131, 199), rgb(69, 141, 214));
+            color: white;
+            padding: 5rem 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 51, 102, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
+        }
+
+        .hero-content h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1.2rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-description {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2.5rem;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1rem 1.8rem;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 1.05rem;
+            opacity: 0.9;
+        }
+
+        /* О портале */
+        .about-portal {
+            margin: 3rem 0;
+        }
+
+        .about-content h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2c3e50;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .about-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .about-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .about-card i {
+            font-size: 2.5rem;
+            color: #0077b6;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-card h3 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .about-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Секция новостей */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .all-news {
+            color: #0077b6;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .all-news:hover {
+            text-decoration: underline;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Обновленные стили для карточек новостей с изображениями */
+        .news-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .news-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .news-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .news-card:hover .news-image img {
+            transform: scale(1.05);
+        }
+
+        .news-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: white;
+            z-index: 2;
+        }
+
+        .news-badge.safety {
+            background: #e63946;
+        }
+
+        .news-badge.education {
+            background: #457b9d;
+        }
+
+        .news-badge.innovation {
+            background: #2a9d8f;
+        }
+
+        .news-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-date {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-card h3 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+            font-size: 1.25rem;
+            line-height: 1.4;
+        }
+
+        .news-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            background: #f8f9fa;
+            color: #0077b6;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 5px;
+            transition: background 0.3s;
+            align-self: flex-start;
+        }
+
+        .read-more:hover {
+            background: #e9ecef;
+        }
+
+        .read-more i {
+            margin-left: 0.5rem;
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+        }
+
+        .read-more:hover i {
+            transform: translateX(3px);
+        }
+
+        /* Календарь */
+        .calendar-section {
+            margin: 3rem auto;
+            max-width: 800px;
+        }
+
+        .modern-calendar {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar-month {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .calendar-nav {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            color: #0077b6;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .calendar-nav:hover {
+            background: #f8f9fa;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: #f8f9fa;
+        }
+
+        .calendar-day.today {
+            background: #0077b6;
+            color: white;
+            font-weight: 600;
+        }
+
+        .calendar-day.event {
+            background: #e9f5ff;
+            font-weight: 600;
+        }
+
+        .calendar-day.event::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            width: 5px;
+            height: 5px;
+            background: #0077b6;
+            border-radius: 50%;
+        }
+
+        .calendar-day.other-month {
+            color: #ccc;
+        }
+
+        .calendar-events {
+            margin-top: 1.5rem;
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .calendar-events h3 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .calendar-events ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .calendar-events li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .event-date {
+            font-weight: 600;
+            color: #0077b6;
+            min-width: 50px;
+        }
+
+        .event-title {
+            flex: 1;
+        }
+
+        .event-time {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Быстрые ссылки */
+        .quick-links-section {
+            margin: 3rem 0;
+        }
+
+        .quick-links-section h2 {
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .quick-links-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .quick-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: white;
+            padding: 2rem 1rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #2c3e50;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .quick-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-link-icon {
+            width: 60px;
+            height: 60px;
+            background: #e9f5ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .quick-link-icon i {
+            font-size: 1.5rem;
+            color: #0077b6;
+        }
+
+        .quick-link span {
+            font-weight: 500;
+        }
+
+        /* Полезные ресурсы */
+        .resources-section {
+            margin: 3rem 0;
+        }
+
+        .resources-section h2 {
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .resources-tabs {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .tab-header {
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tab-link {
+            flex: 1;
+            padding: 1rem;
+            background: none;
+            border: none;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .tab-link.active {
+            color: #0077b6;
+            border-bottom: 2px solid #0077b6;
+        }
+
+        .tab-link:hover:not(.active) {
+            background: #f8f9fa;
+        }
+
+        .tab-content {
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tab-content li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .tab-content li:last-child {
+            border-bottom: none;
+        }
+
+        .tab-content a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .tab-content a:hover {
+            color: #0077b6;
+        }
+
+        .tab-content i {
+            font-size: 1.2rem;
+            color: #0077b6;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1024px) {
+            .calendar-training-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 3rem 1rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-description {
+                font-size: 1.1rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.2rem;
+            }
+            
+            .stat-item {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-links-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .news-image {
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .quick-links-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+            
+            .news-image {
+                height: 160px;
+            }
+        }
+        /* Новый раздел с возможностями портала */
+        .features-section {
+            margin: 4rem 0;
+        }
+
+        .features-section h2 {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: #2c3e50;
+        }
+
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: #e9f5ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-icon i {
+            font-size: 1.8rem;
+            color: #0077b6;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .feature-list li::before {
+            content: "•";
+            color: #0077b6;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-right: 0.5rem;
+        }
+
+        .search-feature {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        .search-feature i {
+            color: #0077b6;
+            margin-right: 0.5rem;
+        }
+
+        .search-feature span {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .feature-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .feature-icon {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <!-- Обновленная герой-секция -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Инновационные решения для эффективной работы</h1>
+            <p class="hero-description">Доступ к современным инструментам для анализа данных, обучения и автоматизации рабочих процессов в рамках единой корпоративной экосистемы</p>
+            <div class="hero-stats">
+            </div>
+        </div>
+    </section>
+
+    <!-- О портале -->
+    <section class="about-portal">
+        <div class="about-content">
+            <h2>О корпоративном портале</h2>
+            <div class="about-grid">
+                <div class="about-card">
+                    <i class="fas fa-user-tie"></i>
+                    <h3>Для кого</h3>
+                    <p>Портал предназначен для сотрудников ПАО "Газпром" - от работников добывающих предприятий до специалистов офисных подразделений.</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-bullseye"></i>
+                    <h3>Цели</h3>
+                    <p>Обеспечение единого доступа к корпоративным знаниям, стандартам и процедурам. Повышение квалификации персонала.</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-cogs"></i>
+                    <h3>Возможности</h3>
+                    <p>Дистанционное обучение, тестирование знаний, доступ к нормативной документации, отслеживание профессионального роста.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Новый раздел с возможностями портала -->
+    <section class="features-section">
+        <h2><i class="fas fa-star"></i> Возможности портала</h2>
+        <div class="features-container">
+            <!-- База знаний -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h3 class="feature-title">Техническая база знаний</h3>
+                        <div class="feature-description">Полный доступ к учебным материалам и тестам</div>
+                    </div>
+                </div>
+                <ul class="feature-list">
+                    <li>Разнообразные лекции и статьи по техническим вопросам</li>
+                    <li>Тесты для самопроверки усвоенного материала</li>
+                </ul>
+            </div>
+
+            <!-- Безопасность -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <h3 class="feature-title">Раздел безопасности</h3>
+                        <div class="feature-description">Все о промышленной и информационной безопасности</div>
+                    </div>
+                </div>
+                <ul class="feature-list">
+                    <li>Обучающие материалы и инструкции</li>
+                    <li>Тесты для проверки знаний требований безопасности</li>
+                    <li>Анализ типовых нарушений и их последствий</li>
+                </ul>
+            </div>
+
+            <!-- Документы -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div>
+                        <h3 class="feature-title">Корпоративные документы</h3>
+                        <div class="feature-description">Централизованное хранилище документов</div>
+                    </div>
+                </div>
+                <ul class="feature-list">
+                    <li>Стандарты и регламенты компании</li>
+                    <li>Внутренние нормативные документы</li>
+                    <li>Шаблоны документов для заполнения</li>
+                </ul>
+            </div>
+
+            <!-- Инциденты и решения -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div>
+                        <h3 class="feature-title">Инциденты и решения</h3>
+                        <div class="feature-description">База знаний о проблемах и способах их решения</div>
+                    </div>
+                </div>
+                <ul class="feature-list">
+                    <li>Описание инцидентов и аварийных ситуаций</li>
+                    <li>Анализ причин и последствий</li>
+                    <li>Рекомендованные способы решения проблем</li>
+                    <li>Профилактические меры</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Быстрые ссылки -->
+    <section class="quick-links-section">
+        <h2>Быстрый доступ</h2>
+        <div class="quick-links-container">
+            <div class="quick-links-grid">
+                <a href="/knowledge-base/" class="quick-link">
+                    <div class="quick-link-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <span>База знаний</span>
+                </a>
+                <a href="/bezopasnost-base/" class="quick-link">
+                    <div class="quick-link-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <span>Безопасность</span>
+                </a>
+                <a href="/inzident/" class="quick-link">
+                    <div class="quick-link-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <span>Инциденты и решения</span>
+                </a>
+                <a href="/doki/" class="quick-link">
+                    <div class="quick-link-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <span>Документы</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Основной контент -->
+    <div class="content-wrapper">
+            <!-- Лента новостей -->
+            <section class="news-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-newspaper"></i> Корпоративные новости</h2>
+                </div>
+                <div class="news-grid">
+                    <!-- Новость 1 -->
+                    <article class="news-card">
+                        <div class="news-image">
+                            <span class="news-badge safety">Безопасность</span>
+                            <img src="images/image1.png" alt="Новые стандарты безопасности">
+                        </div>
+                        <div class="news-content">
+                            <h3>Внедрение новых стандартов безопасности</h3>
+                            <p>Компания утвердила обновленные требования к промышленной безопасности на всех объектах...</p>
+                        </div>
+                    </article>
+                    
+                    <!-- Новость 2 -->
+                    <article class="news-card">
+                        <div class="news-image">
+                            <span class="news-badge education">Образование</span>
+                            <img src="images/image2.png" alt="Итоги года по аварийности">
+                        </div>
+                        <div class="news-content">
+                            <h3>Итоги года: снижение аварийности</h3>
+                            <p>Благодаря новым программам обучения количество инцидентов сократилось на 25%...</p>
+                        </div>
+                    </article>
+                    
+                    <!-- Новость 3 -->
+                    <article class="news-card">
+                        <div class="news-image">
+                            <span class="news-badge innovation">Инновации</span>
+                            <img src="images/image3.png" alt="Исследования в области СПГ">
+                        </div>
+                        <div class="news-content">
+                            <h3>Новые исследования в области СПГ</h3>
+                            <p>Научный отдел представил инновационные разработки в области сжиженного природного газа...</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            
+
+        <!-- Обновленный блок календаря (без обучения и кнопки добавления) -->
+        <section class="calendar-section">
+            <h2><i class="far fa-calendar-alt"></i> Календарь мероприятий</h2>
+            <div class="modern-calendar">
+                <div class="calendar-header">
+                    <button class="calendar-nav prev-month"><i class="fas fa-chevron-left"></i></button>
+                    <h3 class="calendar-month">Июнь 2024</h3>
+                    <button class="calendar-nav next-month"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="calendar-weekdays">
+                    <div>Пн</div>
+                    <div>Вт</div>
+                    <div>Ср</div>
+                    <div>Чт</div>
+                    <div>Пт</div>
+                    <div>Сб</div>
+                    <div>Вс</div>
+                </div>
+                <div class="calendar-days" id="calendar-days">
+                    <!-- Динамически заполняется JavaScript -->
+                </div>
+            </div>
+            <div class="calendar-events">
+                <h3>Ближайшие события:</h3>
+                <ul>
+                    <li>
+                        <span class="event-date">05.06</span>
+                        <span class="event-title">Обучение по новым стандартам</span>
+                        <span class="event-time">10:00-12:00</span>
+                    </li>
+                    <li>
+                        <span class="event-date">12.06</span>
+                        <span class="event-title">Проверка оборудования</span>
+                        <span class="event-time">09:00-18:00</span>
+                    </li>
+                    <li>
+                        <span class="event-date">18.06</span>
+                        <span class="event-title">Публикация новых материалов</span>
+                        <span class="event-time">14:00-16:30</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <!-- Быстрые ссылки -->
+    <section class="quick-links-section">
+        <h2>Быстрый доступ</h2>
+        <div class="quick-links-container">
+            <div class="quick-links-grid">
+                <a href="/knowledge-base/" class="quick-link">
+                    <div class="quick-link-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <span>База знаний</span>
+                </a>
+                <a href="/bezopasnost-base/" class="quick-link">
+                    <div class="quick-link-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <span>Безопасность</span>
+                </a>
+                <a href="/inzident/" class="quick-link">
+                    <div class="quick-link-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <span>Инциденты и решения</span>
+                </a>
+                <a href="/doki/" class="quick-link">
+                    <div class="quick-link-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <span>Документы</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Инициализация календаря
+    initCalendar();
+    
+    // Инициализация табов
+    initTabs();
+});
+
+function initCalendar() {
+    const calendarDays = document.getElementById('calendar-days');
+    const calendarMonth = document.querySelector('.calendar-month');
+    const prevMonthBtn = document.querySelector('.prev-month');
+    const nextMonthBtn = document.querySelector('.next-month');
+    
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+    
+    // Отображаем текущий месяц
+    renderCalendar(currentMonth, currentYear);
+    
+    // Обработчики кнопок переключения месяцев
+    prevMonthBtn.addEventListener('click', () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        renderCalendar(currentMonth, currentYear);
+    });
+    
+    nextMonthBtn.addEventListener('click', () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        renderCalendar(currentMonth, currentYear);
+    });
+    
+    function renderCalendar(month, year) {
+        // Устанавливаем отображаемый месяц и год
+        const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                          'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        calendarMonth.textContent = `${monthNames[month]} ${year}`;
+        
+        // Очищаем календарь
+        calendarDays.innerHTML = '';
+        
+        // Получаем первый день месяца и количество дней в месяце
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        
+        // Получаем количество дней в предыдущем месяце
+        const daysInPrevMonth = new Date(year, month, 0).getDate();
+        
+        // Заполняем пустые ячейки перед первым днем месяца
+        for (let i = 0; i < firstDay; i++) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day other-month';
+            dayElement.textContent = daysInPrevMonth - firstDay + i + 1;
+            calendarDays.appendChild(dayElement);
+        }
+        
+        // Заполняем дни текущего месяца
+        const today = new Date();
+        for (let i = 1; i <= daysInMonth; i++) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day';
+            dayElement.textContent = i;
+            
+            // Проверяем, является ли день сегодняшним
+            if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                dayElement.classList.add('today');
+            }
+            
+            // Пример: отмечаем некоторые дни как события (5, 12, 18 числа)
+            if ([5, 12, 18].includes(i)) {
+                dayElement.classList.add('event');
+            }
+            
+            calendarDays.appendChild(dayElement);
+        }
+        
+        // Заполняем оставшиеся ячейки днями следующего месяца
+        const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+        const remainingCells = totalCells - (firstDay + daysInMonth);
+        
+        for (let i = 1; i <= remainingCells; i++) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day other-month';
+            dayElement.textContent = i;
+            calendarDays.appendChild(dayElement);
+        }
+    }
+}
+
+function initTabs() {
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            const tabId = link.getAttribute('data-tab');
+            
+            // Удаляем активный класс у всех вкладок и контента
+            tabLinks.forEach(l => l.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            // Добавляем активный класс к текущей вкладке и контенту
+            link.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+}
+</script>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php'; ?>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="/js/home.js"></script>
+
+</body>
+</html>
